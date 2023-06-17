@@ -4,7 +4,7 @@
   <b-navbar toggleable="lg"  class="nav-bar">    
     <router-link tag="b-navbar-brand" :to="{ name: 'main' }"
      
-      >    <img src="https://res.cloudinary.com/dqwbwwfui/image/upload/v1656438855/samples/logo1_kswuhs.png">
+      >   Recipe Site
       <!-- <b>Vue Recipes</b> -->
     </router-link>
     <!-- Home -->
@@ -107,20 +107,5 @@ export default {
 </script>
 
 <style>
-.nav-bar{
-  font-family:"Comic Sans MS", cursive, sans-serif;
-  /* color:#FAEBD7 */
-  background-color: #F19CBB!important;
-  height:50px ;
 
-
-}
-.nav-bar.navbar-dark.bg-dark{
-    background-color: #AABB55!important;
- }
-
-.bold-option{
-  font-weight: bolder;
-  font-style: black;
-}
 </style>
