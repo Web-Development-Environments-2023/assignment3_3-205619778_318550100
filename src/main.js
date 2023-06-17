@@ -5,6 +5,8 @@ import axios from "axios";
 
 import routes from "./routes";
 import VueRouter from "vue-router";
+
+
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
@@ -103,3 +105,5 @@ new Vue({
   },
   render: (h) => h(App),
 }).$mount("#app");
+
+axios.defaults.withCredentials=true;
