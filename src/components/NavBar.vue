@@ -36,9 +36,9 @@
       
       <!-- dropdown Myrecipes : Favorites,Private,Family -->
       <b-nav-item-dropdown  toggle-class="text-dark" text="more" class="bold-option">
-        <router-link tag="b-dropdown-item" to="/users/favorites"
-          ><b style="color: black">Favorites</b></router-link>     
-        <router-link tag="b-dropdown-item" to="/users/MyRecipes"
+        <router-link tag="b-dropdown-item" :to="{ name: 'favorites' }"
+          ><b style="color: black" >Favorites</b></router-link>     
+        <router-link tag="b-dropdown-item" :to="{ name: 'myrecipes' }"
           ><b style="color: black">My Recipes</b></router-link>
         <router-link tag="b-dropdown-item" to="/users/familyRecipes"
           ><b style="color: black">My Family's Recipes</b></router-link>
