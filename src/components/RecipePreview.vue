@@ -1,24 +1,25 @@
 <template>
-  <router-link :to="{ name: 'recipe', params: { recipeId: recipe.id } }" class="recipe-preview">
+  <router-link :to="{name:'recipe', params:{recipeId: recipe.id}}" class="recipe-preview">
     <div>
       <b-card id="card" tag="article" style="max-width: 20rem;" class="mb-2">
         <b-card-img id="img" :src="recipe.image" img-alt="Image"></b-card-img>
         <b-card-title id="title" :title="recipe.title"></b-card-title>
         <b-card-text>
           <b-list-group >
-            <dt> {{ recipe.readyInMinutes }} minutes to prepare</dt>
-            <dt>{{ recipe.popularity }}  Liked this recipe</dt>
+            <dt>{{ recipe.readyInMinutes }} minutes to prepare</dt>
+            <dt>{{ recipe.popularity }} Liked this recipe</dt>
             <dt v-if="recipe.vegan"> Vegan</dt>
-            <dt v-if="recipe.vegetarian"> Vegeterian</dt>
+            <dt v-if="recipe.vegetarian">Vegeterian</dt>
             <dt v-if="recipe.glutenFree">Gluten Free</dt>
-            <dt v-if="recipe.isWatched"> Viewed Recipe</dt>
-            <dt v-if="recipe.isFavorite">  Favorite Recipe</dt>
-            </b-list-group>
+            <dt v-if="recipe.isWatched">Viewed Recipe</dt>
+            <dt v-if="recipe.isFavorite">Favorite Recipe</dt>
+          </b-list-group>
         </b-card-text>
       </b-card>
     </div>
   </router-link>
 </template>
+
 
 <script>
 export default {
@@ -63,6 +64,7 @@ export default {
   }
 };
 </script>
+
 
 <style scoped>
 .recipe-preview {
