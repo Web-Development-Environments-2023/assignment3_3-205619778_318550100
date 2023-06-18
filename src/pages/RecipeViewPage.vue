@@ -10,15 +10,14 @@
           <div class="wrapped">
             <div class="mb-3">
               <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
-              <div>Likes: {{ recipe.aggregateLikes }} likes</div>
+              <div>Likes: {{ recipe.popularity }} likes</div>
+              <div>Serving: {{ recipe.servings }} servings</div>
             </div>
             Ingredients:
             <ul>
               <li
-                v-for="(r, index) in recipe.extendedIngredients"
-                :key="index + '_' + r.id"
-              >
-                {{ r.original }}
+              v-for="ing in recipe.ingredients" :key="ing.name">
+               {{ing.amount }} {{ing.name }}
               </li>
             </ul>
           </div>
@@ -52,11 +51,12 @@ export default {
     try {
       let response;
       // response = this.$route.params.response;
+      let id = this.$route.params.recipeId
 
       try {
         response = await this.axios.get(
           // "https://test-for-3-2.herokuapp.com/recipes/info",
-          this.$root.store.server_domain + "/recipes",
+          this.$root.store.server_domain + "/recipes/" +id,
           {
             params: { id: this.$route.params.recipeId }
           }
@@ -69,15 +69,16 @@ export default {
         this.$router.replace("/NotFound");
         return;
       }
-
+      console.log(response.data);
       let {
         instructions,
-        extendedIngredients,
+        ingredients,
         popularity,
         readyInMinutes,
+        servings,
         image,
         title
-      } = response.data.recipe;
+      } = response.data;
 
       let _instructions = instructions
         .map((fstep) => {
@@ -87,12 +88,11 @@ export default {
         .reduce((a, b) => [...a, ...b], []);
 
       let _recipe = {
-        instructions,
         _instructions,
-        analyzedInstructions,
-        extendedIngredients,
+        ingredients,
         popularity,
         readyInMinutes,
+        servings,
         image,
         title
       };
