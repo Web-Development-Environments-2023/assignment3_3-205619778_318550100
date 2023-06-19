@@ -7,6 +7,7 @@
 <script>
 import RecipePreviewList from '../components/RecipePreviewList.vue'
 export default {
+  name:"MyRecipes",
   components: {
       RecipePreviewList,
   },

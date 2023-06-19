@@ -10,7 +10,7 @@
           <div class="wrapped">
             <div class="mb-3">
               <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
-              <div>Likes: {{ recipe.popularity }} likes</div>
+              <div v-if="popularity">Likes: {{ recipe.popularity }} likes</div>
               <div>Serving: {{ recipe.servings }} servings</div>
             </div>
             Ingredients:
@@ -44,22 +44,28 @@
 export default {
   data() {
     return {
-      recipe: null
+      recipe: null,
+      myRecipe: false
     };
   },
   async created() {
     try {
       let response;
+      let _resoponse;
+      let path = "/recipes/"
       // response = this.$route.params.response;
       let id = this.$route.params.recipeId
-
+      if(this.$route.params.route_name === "/users/myRecipes"){
+        path = "/users/myRecipes/"
+        this.myRecipe = true;
+      }
       try {
         response = await this.axios.get(
           // "https://test-for-3-2.herokuapp.com/recipes/info",
-          this.$root.store.server_domain + "/recipes/" +id,
+          this.$root.store.server_domain + path +id,
           {
             params: { id: this.$route.params.recipeId }
-          }
+          }   
         );
 
         // console.log("response.status", response.status);
@@ -69,7 +75,12 @@ export default {
         this.$router.replace("/NotFound");
         return;
       }
-      console.log(response.data);
+      if(this.myRecipe){
+        _resoponse = response.data[0]
+      }
+      else{
+        _resoponse = response.data
+      }
       let {
         instructions,
         ingredients,
@@ -78,9 +89,29 @@ export default {
         servings,
         image,
         title
-      } = response.data;
+      } = _resoponse;
 
-      let _instructions = instructions
+      if(this.myRecipe){
+      console.log(_resoponse)
+      const jsonIngredients = JSON.parse(ingredients)
+      const jsonInstraction = JSON.parse(instructions);
+    
+
+      ingredients = jsonIngredients.map((item) => ({
+      name: item.name,
+      amount: parseInt(item.amount) // Convert amount to a number if needed
+        }));
+
+        instructions = jsonInstraction.map((item) => ({
+        name: item.name,
+        steps: item.steps.map((step) => ({
+          number: step.number,
+          step: step.step
+        }))
+     }));
+    }
+      
+     let _instructions = instructions
         .map((fstep) => {
           fstep.steps[0].step = fstep.name + fstep.steps[0].step;
           return fstep.steps;

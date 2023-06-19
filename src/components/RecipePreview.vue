@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{name:'recipe', params:{recipeId: recipe.id}}" class="recipe-preview">
+  <router-link :to="{name:'recipe', params:{recipeId: recipe.id, route_name: this.route_name}}" class="recipe-preview">
     <div>
       <b-card id="card" tag="article" style="max-width: 20rem;" class="mb-2">
         <b-card-img id="img" :src="recipe.image" img-alt="Image"></b-card-img>
@@ -38,9 +38,9 @@ export default {
       type: Object,
       required: true
     },
-    myRecipe: {
-      type: Boolean,
-      required: false,
+    route_name:{
+      type: String,
+      required: false
     },
     // title: {
     //   type: String,
