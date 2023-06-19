@@ -17,11 +17,12 @@
       </b-navbar-nav>
       <!-- Registred user  -->
       <b-navbar-nav v-if="$root.store.username">
-        <!-- CreateRecipePage -->
+        <!-- Create Recipe Modal -->
         <b-navbar-nav>
-          <b-nav-item v-b-modal.modal-1 id="modal-1" tag="b-nav-item" @click="showModal"><b style="color: black">Create Recipe</b></b-nav-item>
+        <b-nav-item v-b-modal.modal-1 id="modal-1" tag="b-nav-item" @click="showModal"
+          ><b style="color: black">Create Recipe</b></b-nav-item>
           <CreateRecipePage v-if="createRecipeClicked"></CreateRecipePage>
-        </b-navbar-nav>
+      </b-navbar-nav>
         <!-- Personal dropdown: Favorites, My Recipes, My Family Recipes -->
         <b-nav-item-dropdown toggle-class="text-dark" text="Personal" class="bold-option">
           <router-link tag="b-dropdown-item" :to="{name:'favorites'}"><b style="color: black" >Favorites</b></router-link>     
