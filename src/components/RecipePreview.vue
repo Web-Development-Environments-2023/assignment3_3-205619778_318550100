@@ -38,10 +38,10 @@ export default {
       type: Object,
       required: true
     },
-    // id: {
-    //   type: Number,
-    //   required: true
-    // },
+    myRecipe: {
+      type: Boolean,
+      required: false,
+    },
     // title: {
     //   type: String,
     //   required: true

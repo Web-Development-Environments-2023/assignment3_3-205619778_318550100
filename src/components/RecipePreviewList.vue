@@ -7,7 +7,7 @@
       </h3>
       <b-row v-for="r in recipes" :key="r.id">
         <b-col>
-          <RecipePreview class="recipePreview" :recipe="r" :title="title" :route_name="route_name"/>
+          <RecipePreview class="recipePreview" :recipe="r" :title="title" :myRecipes="myRecipe" :route_name="route_name"/>
         </b-col>
       </b-row>
     </b-container>
@@ -49,6 +49,7 @@ export default {
         const recipes = response.data;
         this.recipes = [];
         this.recipes.push(...recipes);
+        this.myRecipe = false;
       } catch (error) {
         console.log(error);
       }
