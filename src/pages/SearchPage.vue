@@ -31,18 +31,26 @@
       </div>
     </b-form>
     <b-alert class="mt-2" v-if="form.submitError" variant="warning" dismissible show>Search failed: {{ form.submitError }}</b-alert>
-    <!-- Search Results -->
-    <div v-if="search_results">
+
+  <div v-if="$root.store.username && !LastSearchcalled" :do="LastSearch()">
+  </div>
+     <div v-if="search_results">
       <h5 id="no-results" v-if="noResults">We couldn't find recipes that match your search</h5>
-      <div v-else class="text-center">
+      
+      <div v-else class="text-center"> 
         <b-dropdown id="sort" v-if="!isEmpty" text="Sort By" variant="outline-dark" class="m-2">
           <b-dropdown-item v-on:click="this.sortByPrepTime">Preperation Time</b-dropdown-item>
           <b-dropdown-item v-on:click="this.sortByPopularity">Popularity</b-dropdown-item>
         </b-dropdown>
-        <RecipePreviewList ref="result" title="Search Results" class="ResultRecipes"/>
+        <b-row v-for="r in search_results" :key="r.id">
+        <b-col>
+          <RecipePreview class="recipePreview" :recipe="r"/>
+        </b-col>
+      </b-row>
       </div>
     </div>
   </div>
+
 </template>
 
 
@@ -51,11 +59,13 @@ import cuisines from "../assets/cuisines.js";
 import diets from "../assets/diets.js";
 import intolerances from "../assets/intolerances.js";
 import { required } from "vuelidate/lib/validators";
-import RecipePreviewList from "../components/RecipePreviewList";
+// import RecipePreviewList from "../components/RecipePreviewList";
+import RecipePreview from "../components/RecipePreview";
 export default {
   name: "Search",
   components: {
-    RecipePreviewList,
+    RecipePreview,
+    
   },
   data() {
     return {
@@ -73,6 +83,7 @@ export default {
       errors: [],
       search_results: [],
       noResults: false,
+      LastSearchcalled: false,
     };
   },
   validations: {
@@ -98,40 +109,41 @@ export default {
       const { $dirty, $error } = this.$v.form[param];
       return $dirty ? !$error : null;
     },
+    async LastSearch() {
+      try {
+        const response = await this.axios.get(
+          this.$root.store.server_domain + "/users/lastSearch"
+        );
+        this.search_results = response.data;
+      } catch (error) {
+        console.log(error);
+      }
+      this.LastSearchcalled=true;
+
+    },
     async Search() {
       try {
         const response = await this.axios.get(
           this.$root.store.server_domain + "/recipes/search",
           {
+            params:{
             query: this.form.search,
             number: this.form.number,
             cuisine: this.form.cuisine,
             diet: this.form.diet,
             intolerance: this.form.intolerance,
+          }
           },
+        
         );
         this.search_results = response.data;
-        if (!this.isEmpty) {
-          this.$refs.res.pushRecipes(this.search_results);
-        } else {
+        if (this.isEmpty) {
           this.noResults = true;
-          this.$refs.res.pushRecipes(this.search_results);
         }
-        if (this.$root.store.username) {
-          this.$root.store.setLastSearch(
-          JSON.stringify({
-            search: this.form.search,
-            number: this.form.number,
-            cuisine: this.form.cuisine,
-            diet: this.form.diet,
-            intolerance: this.form.intolerance,
-            search_results: this.search_results,
-          })
-          );
-        }
+
     } catch (err) {
-      console.log(err.response);
-      this.form.submitError = err.response.data.message;
+      console.log(err);
+      // this.form.submitError = err.response.data.message;
     }
     },
     onSearch() {
@@ -155,7 +167,20 @@ export default {
       this.$nextTick(() => {
         this.$v.$reset();
       });
-    }
+    },
+    sortByPrepTime() {
+        this.search_results.sort(function(a, b) {
+          return a.readyInMinutes - b.readyInMinutes;
+        })
+    },
+    sortByPopularity() {
+        this.search_results.sort(function(a, b) {
+          return b.popularity - a.popularity;
+        })
+    },
+  },
+  computed: {
+    isEmpty: ({ search_results }) => search_results.length === 0,
   }
 };
 </script>

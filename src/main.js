@@ -2,11 +2,11 @@ import Vue from "vue";
 import App from "./App.vue";
 import VueAxios from "vue-axios";
 import axios from "axios";
-
+import VueScrollFixedNavbar from "vue-scroll-fixed-navbar";
 import routes from "./routes";
 import VueRouter from "vue-router";
 
-
+Vue.use(VueScrollFixedNavbar);
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
@@ -22,6 +22,7 @@ import {
   ButtonPlugin,
   CardPlugin,
   NavbarPlugin,
+  ModalPlugin,
   FormSelectPlugin,
   AlertPlugin,
   ToastPlugin,
@@ -34,6 +35,7 @@ import {
   ButtonPlugin,
   CardPlugin,
   NavbarPlugin,
+  ModalPlugin,
   FormSelectPlugin,
   AlertPlugin,
   ToastPlugin,
