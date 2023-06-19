@@ -1,19 +1,21 @@
 <template>
-    <div class="container">
-      <RecipePreviewList ref="myrecipes" title="My Recipes" route_name="/users/myRecipes" class="MyRecipes"/>
-    </div>
+  <div class="container">
+    <RecipePreviewList ref="myrecipes" title="My Recipes" route_name="/users/myRecipes" class="MyRecipes"/>
+  </div>
+</template>
   
-  </template>
+<script>
+import RecipePreviewList from '../components/RecipePreviewList.vue'
+export default {
+  components: {
+      RecipePreviewList,
+  },
+  mounted() {
+    this.$refs.myRecipes.updateMyRecipes();
+  },
+}
+</script>
   
-  <script>
-  import RecipePreviewList from '../components/RecipePreviewList.vue'
-  export default {
-      components: {
-          RecipePreviewList,
-      }
-  }
-  </script>
+<style>
   
-  <style>
-  
-  </style>
+</style>
