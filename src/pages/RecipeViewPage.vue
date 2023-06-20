@@ -10,8 +10,15 @@
           <div class="wrapped">
             <div class="mb-3">
               <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
-              <div v-if="popularity">Likes: {{ recipe.popularity }} likes</div>
+              <div v-if="recipe.popularity">Likes: {{ recipe.popularity }} likes</div>
               <div>Serving: {{ recipe.servings }} servings</div>
+              <div v-if="recipe.vegetarian">Vegeterian</div>
+              <div v-if="recipe.vegan">Vegan</div>
+              <div v-if="recipe.glutenFree">Gluten Free</div>
+              <div v-if="recipe.isFavorite">Favorite Recipe</div>
+              <b-button v-if="!recipe.isFavorite && $root.store.username" v-b-modal.modal-1 @click="addToFavorites($route.params.recipeId)">
+             {{ recipe.isFavorite ? 'Favorite Recipe' : 'Add to Favorites' }}
+            </b-button>
             </div>
             Ingredients:
             <ul>
@@ -41,17 +48,36 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
       recipe: null,
-      myRecipe: false
+      myRecipe: false,
+      familyRecipes: false
     };
+  },
+  methods: {
+    async addToFavorites(recipeId){
+      try {
+        const response = await this.axios.post(
+          this.$root.store.server_domain + "/users/favorites/",
+          {
+            recipeId: recipeId
+          }
+        );
+
+        this.recipe.isFavorite = true;
+      } catch (error) {
+        console.log(error);
+      }
+    }
   },
   async created() {
     try {
       let response;
-      let _resoponse;
+      let _response;
+      let family_response;
       let path = "/recipes/"
       // response = this.$route.params.response;
       let id = this.$route.params.recipeId
@@ -59,6 +85,11 @@ export default {
         path = "/users/myRecipes/"
         this.myRecipe = true;
       }
+      if(this.$route.params.route_name === "/users/familyRecipes"){
+        path = "/users/familyRecipes/"
+        this.familyRecipes = true;
+      }
+      
       try {
         response = await this.axios.get(
           // "https://test-for-3-2.herokuapp.com/recipes/info",
@@ -75,11 +106,13 @@ export default {
         this.$router.replace("/NotFound");
         return;
       }
-      if(this.myRecipe){
-        _resoponse = response.data[0]
+      // console.log(response.data[0])
+      if(this.myRecipe || this.familyRecipes){
+        _response = response.data[0]
+
       }
       else{
-        _resoponse = response.data
+        _response = response.data
       }
       let {
         instructions,
@@ -88,11 +121,17 @@ export default {
         readyInMinutes,
         servings,
         image,
-        title
-      } = _resoponse;
+        title,
+        vegan,
+        vegetarian,
+        glutenFree,
+        isWatched,
+        isFavorite,
+      } = _response;
+
+      //if is Private Recipe
 
       if(this.myRecipe){
-      console.log(_resoponse)
       const jsonIngredients = JSON.parse(ingredients)
       const jsonInstraction = JSON.parse(instructions);
     
@@ -109,7 +148,50 @@ export default {
           step: step.step
         }))
      }));
+     console.log(instructions)
     }
+
+    //if is Family Recipe
+
+    if(this.familyRecipes){
+          console.log(instructions)
+          const steps = instructions.match(/\d+\.[^.]+/g) || [];
+          const recipeSteps = [];
+
+          steps.forEach((step) => {
+            const [num, desc] = step.split(".");
+            const number = parseInt(num.trim());
+            const description = desc.trim();
+
+            if (!isNaN(number) && description !== "") {
+              recipeSteps.push({
+                number: number,
+                step: description,
+              });
+            }
+          });
+
+          instructions = JSON.stringify(recipeSteps, null, 4);
+
+
+
+      console.log(instructions)
+      const ingredientsList = ingredients.split(" ");
+
+      const convertedIngredients = [];
+
+      for (let i = 0; i < ingredientsList.length; i += 2) {
+        const amount = parseFloat(ingredientsList[i]);
+        const name = ingredientsList[i + 1];
+
+        convertedIngredients.push({ name, amount });
+      }
+
+      ingredients = JSON.stringify(convertedIngredients);
+
+    }
+
+    //rest of recipes
       
      let _instructions = instructions
         .map((fstep) => {
@@ -125,14 +207,20 @@ export default {
         readyInMinutes,
         servings,
         image,
-        title
+        title,
+        vegan,
+        vegetarian,
+        glutenFree,
+        isWatched,
+        isFavorite,
+        
       };
 
       this.recipe = _recipe;
     } catch (error) {
       console.log(error);
     }
-  }
+}
 };
 </script>
 
