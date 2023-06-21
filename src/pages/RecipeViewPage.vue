@@ -16,7 +16,9 @@
               <div v-if="recipe.vegan">Vegan</div>
               <div v-if="recipe.glutenFree">Gluten Free</div>
               <div v-if="recipe.isFavorite">Favorite Recipe</div>
-              <b-button v-if="!recipe.isFavorite && $root.store.username" v-b-modal.modal-1 @click="addToFavorites($route.params.recipeId)">
+              <div v-if="recipe.creator">Made by: {{ recipe.creator }}</div>
+              <div v-if="recipe.customary">Usally Make in: {{ recipe.customary }}</div>
+              <b-button v-if="!recipe.isFavorite && $root.store.username && this.$route.params.route_name!='/users/familyRecipes' && this.$route.params.route_name!='/users/myRecipes' " v-b-modal.modal-1 @click="addToFavorites($route.params.recipeId)">
              {{ recipe.isFavorite ? 'Favorite Recipe' : 'Add to Favorites' }}
             </b-button>
             </div>
@@ -77,7 +79,6 @@ export default {
     try {
       let response;
       let _response;
-      let family_response;
       let path = "/recipes/"
       // response = this.$route.params.response;
       let id = this.$route.params.recipeId
@@ -127,11 +128,12 @@ export default {
         glutenFree,
         isWatched,
         isFavorite,
+        creator,
+        customary
       } = _response;
-
       //if is Private Recipe
 
-      if(this.myRecipe){
+      if(this.myRecipe || this.familyRecipes){
       const jsonIngredients = JSON.parse(ingredients)
       const jsonInstraction = JSON.parse(instructions);
     
@@ -148,48 +150,9 @@ export default {
           step: step.step
         }))
      }));
-     console.log(instructions)
     }
+    console.log(this.$route.params.route_name)
 
-    //if is Family Recipe
-
-    if(this.familyRecipes){
-          console.log(instructions)
-          const steps = instructions.match(/\d+\.[^.]+/g) || [];
-          const recipeSteps = [];
-
-          steps.forEach((step) => {
-            const [num, desc] = step.split(".");
-            const number = parseInt(num.trim());
-            const description = desc.trim();
-
-            if (!isNaN(number) && description !== "") {
-              recipeSteps.push({
-                number: number,
-                step: description,
-              });
-            }
-          });
-
-          instructions = JSON.stringify(recipeSteps, null, 4);
-
-
-
-      console.log(instructions)
-      const ingredientsList = ingredients.split(" ");
-
-      const convertedIngredients = [];
-
-      for (let i = 0; i < ingredientsList.length; i += 2) {
-        const amount = parseFloat(ingredientsList[i]);
-        const name = ingredientsList[i + 1];
-
-        convertedIngredients.push({ name, amount });
-      }
-
-      ingredients = JSON.stringify(convertedIngredients);
-
-    }
 
     //rest of recipes
       
@@ -213,6 +176,8 @@ export default {
         glutenFree,
         isWatched,
         isFavorite,
+        creator,
+        customary
         
       };
 
