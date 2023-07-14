@@ -10,8 +10,17 @@
           <div class="wrapped">
             <div class="mb-3">
               <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
-              <div>Likes: {{ recipe.popularity }} likes</div>
+              <div v-if="recipe.popularity">Likes: {{ recipe.popularity }} likes</div>
               <div>Serving: {{ recipe.servings }} servings</div>
+              <div v-if="recipe.vegetarian">Vegeterian</div>
+              <div v-if="recipe.vegan">Vegan</div>
+              <div v-if="recipe.glutenFree">Gluten Free</div>
+              <div v-if="recipe.isFavorite">Favorite Recipe</div>
+              <div v-if="recipe.creator">Made by: {{ recipe.creator }}</div>
+              <div v-if="recipe.customary">Usally Make in: {{ recipe.customary }}</div>
+              <b-button v-if="!recipe.isFavorite && $root.store.username && this.$route.params.route_name!='/users/familyRecipes' && this.$route.params.route_name!='/users/myRecipes' " v-b-modal.modal-1 @click="addToFavorites($route.params.recipeId)">
+             {{ recipe.isFavorite ? 'Favorite Recipe' : 'Add to Favorites' }}
+            </b-button>
             </div>
             Ingredients:
             <ul>
@@ -41,25 +50,54 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
-      recipe: null
+      recipe: null,
+      myRecipe: false,
+      familyRecipes: false
     };
+  },
+  methods: {
+    async addToFavorites(recipeId){
+      try {
+        const response = await this.axios.post(
+          this.$root.store.server_domain + "/users/favorites/",
+          {
+            recipeId: recipeId
+          }
+        );
+
+        this.recipe.isFavorite = true;
+      } catch (error) {
+        console.log(error);
+      }
+    }
   },
   async created() {
     try {
       let response;
+      let _response;
+      let path = "/recipes/"
       // response = this.$route.params.response;
       let id = this.$route.params.recipeId
-
+      if(this.$route.params.route_name === "/users/myRecipes"){
+        path = "/users/myRecipes/"
+        this.myRecipe = true;
+      }
+      if(this.$route.params.route_name === "/users/familyRecipes"){
+        path = "/users/familyRecipes/"
+        this.familyRecipes = true;
+      }
+      
       try {
         response = await this.axios.get(
           // "https://test-for-3-2.herokuapp.com/recipes/info",
-          this.$root.store.server_domain + "/recipes/" +id,
+          this.$root.store.server_domain + path +id,
           {
             params: { id: this.$route.params.recipeId }
-          }
+          }   
         );
 
         // console.log("response.status", response.status);
@@ -69,7 +107,14 @@ export default {
         this.$router.replace("/NotFound");
         return;
       }
-      console.log(response.data);
+      // console.log(response.data[0])
+      if(this.myRecipe || this.familyRecipes){
+        _response = response.data[0]
+
+      }
+      else{
+        _response = response.data
+      }
       let {
         instructions,
         ingredients,
@@ -77,10 +122,41 @@ export default {
         readyInMinutes,
         servings,
         image,
-        title
-      } = response.data;
+        title,
+        vegan,
+        vegetarian,
+        glutenFree,
+        isWatched,
+        isFavorite,
+        creator,
+        customary
+      } = _response;
+      //if is Private Recipe
 
-      let _instructions = instructions
+      if(this.myRecipe || this.familyRecipes){
+      const jsonIngredients = JSON.parse(ingredients)
+      const jsonInstraction = JSON.parse(instructions);
+    
+
+      ingredients = jsonIngredients.map((item) => ({
+      name: item.name,
+      amount: parseInt(item.amount) // Convert amount to a number if needed
+        }));
+
+        instructions = jsonInstraction.map((item) => ({
+        name: item.name,
+        steps: item.steps.map((step) => ({
+          number: step.number,
+          step: step.step
+        }))
+     }));
+    }
+    console.log(this.$route.params.route_name)
+
+
+    //rest of recipes
+      
+     let _instructions = instructions
         .map((fstep) => {
           fstep.steps[0].step = fstep.name + fstep.steps[0].step;
           return fstep.steps;
@@ -94,14 +170,22 @@ export default {
         readyInMinutes,
         servings,
         image,
-        title
+        title,
+        vegan,
+        vegetarian,
+        glutenFree,
+        isWatched,
+        isFavorite,
+        creator,
+        customary
+        
       };
 
       this.recipe = _recipe;
     } catch (error) {
       console.log(error);
     }
-  }
+}
 };
 </script>
 

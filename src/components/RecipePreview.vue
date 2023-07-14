@@ -1,13 +1,15 @@
 <template>
-  <router-link :to="{name:'recipe', params:{recipeId: recipe.id}}" class="recipe-preview">
+  
     <div>
       <b-card id="card" tag="article" style="max-width: 20rem;" class="mb-2">
-        <b-card-img id="img" :src="recipe.image" img-alt="Image"></b-card-img>
+        <router-link :to="{name:'recipe', params:{recipeId: recipe.id, route_name: this.route_name}}" class="recipe-preview">
+        <b-card-img id="img" :src="recipe.image" img-alt="Image" class="hover-effect"></b-card-img>
+        </router-link>
         <b-card-title id="title" :title="recipe.title"></b-card-title>
         <b-card-text>
           <b-list-group >
             <dt>{{ recipe.readyInMinutes }} minutes to prepare</dt>
-            <dt>{{ recipe.popularity }} Liked this recipe</dt>
+            <dt v-if="recipe.popularity">{{ recipe.popularity }} Liked this recipe</dt>
             <dt v-if="recipe.vegan"> Vegan</dt>
             <dt v-if="recipe.vegetarian">Vegeterian</dt>
             <dt v-if="recipe.glutenFree">Gluten Free</dt>
@@ -15,13 +17,20 @@
             <dt v-if="recipe.isFavorite">Favorite Recipe</dt>
           </b-list-group>
         </b-card-text>
+        <div v-if="!recipe.isFavorite && $root.store.username && this.route_name!='/users/myRecipes' && this.route_name!='/users/familyRecipes'" class="add-favorite-button">
+          <b-button v-b-modal.modal-1 @click="addToFavorites(recipe.id)">
+          {{ recipe.isFavorite ? 'Favorite Recipe' : 'Add to Favorites' }}
+        </b-button>
+
+      </div>
       </b-card>
     </div>
-  </router-link>
+
 </template>
 
 
 <script>
+
 export default {
   mounted() {
     this.axios.get(this.recipe.image).then((i) => {
@@ -30,7 +39,7 @@ export default {
   },
   data() {
     return {
-      image_load: false
+      image_load: false,
     };
   },
   props: {
@@ -38,30 +47,27 @@ export default {
       type: Object,
       required: true
     },
-    // id: {
-    //   type: Number,
-    //   required: true
-    // },
-    // title: {
-    //   type: String,
-    //   required: true
-    // },
-    // readyInMinutes: {
-    //   type: Number,
-    //   required: true
-    // },
-    // image: {
-    //   type: String,
-    //   required: true
-    // },
-    // aggregateLikes: {
-    //   type: Number,
-    //   required: false,
-    //   default() {
-    //     return undefined;
-    //   }
-    // }
-  }
+    route_name:{
+      type: String,
+      required: false
+    },
+  },
+  methods:{
+    async addToFavorites(recipeId){
+      try {
+        const response = await this.axios.post(
+          this.$root.store.server_domain + "/users/favorites/",
+          {
+            recipeId: recipeId
+          }
+        );
+
+        this.recipe.isFavorite = true;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    }
 };
 </script>
 
@@ -140,5 +146,13 @@ export default {
   width: 90px;
   display: table-cell;
   text-align: center;
+
+
+}
+.recipe-preview .hover-effect:hover {
+  /* Define your hover effect styles here */
+  /* For example, you can change the opacity or add a border */
+  opacity: 0.8;
+  border: 2px solid red;
 }
 </style>

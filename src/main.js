@@ -22,11 +22,15 @@ import {
   ButtonPlugin,
   CardPlugin,
   NavbarPlugin,
-  ModalPlugin,
   FormSelectPlugin,
   AlertPlugin,
   ToastPlugin,
   LayoutPlugin,
+  FormRadioPlugin,
+  ModalPlugin,
+  FormCheckboxPlugin,
+  FormTextareaPlugin,
+  ListGroupPlugin,
 } from "bootstrap-vue";
 [
   FormGroupPlugin,
@@ -35,11 +39,15 @@ import {
   ButtonPlugin,
   CardPlugin,
   NavbarPlugin,
-  ModalPlugin,
   FormSelectPlugin,
   AlertPlugin,
   ToastPlugin,
   LayoutPlugin,
+  FormRadioPlugin,
+  ModalPlugin,
+  FormCheckboxPlugin,
+  FormTextareaPlugin,
+  ListGroupPlugin,
 ].forEach((x) => Vue.use(x));
 Vue.use(Vuelidate);
 
