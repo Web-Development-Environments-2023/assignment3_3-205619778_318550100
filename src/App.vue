@@ -33,6 +33,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   min-height: 100vh;
+  background: rgba(0, 0, 0, 0.438) url("./assets/background.jpg");
+  background-blend-mode: darken;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 #nav {
@@ -41,7 +45,6 @@ export default {
 
 #nav a {
   font-weight: bold;
-  color: #2c3e50;
 }
 
 #nav a.router-link-exact-active {
