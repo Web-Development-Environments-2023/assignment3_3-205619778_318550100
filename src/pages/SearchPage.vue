@@ -62,10 +62,12 @@
     <div v-if="search_results">
       <h5 id="no-results" v-if="noResults">We couldn't find recipes that match your search</h5>
       <div v-else class="text-center"> 
+
         <b-dropdown id="sort" v-if="!isEmpty" text="Sort By" variant="outline-dark" class="m-2">
           <b-dropdown-item v-on:click="this.sortByPrepTime">Preperation Time</b-dropdown-item>
           <b-dropdown-item v-on:click="this.sortByPopularity">Popularity</b-dropdown-item>
         </b-dropdown>
+
         <b-row v-for="r in search_results" :key="r.id">
           <b-col>
             <RecipePreview class="recipePreview" :recipe="r"/>
@@ -202,15 +204,18 @@ export default {
   }
 };
 </script>
+
 <style lang="scss" scoped>
 .container {
   margin: auto;
   margin-top: 5%;
   margin-bottom: 5%;
-  max-width: 800px;
+  max-width: 750px;
   padding: 30px;
   color: rgb(255, 255, 255);
   font-family: 'KG First Time In Forever', sans-serif;
+  font-weight: 900;
+
 }
 .title{
   text-align: center;
@@ -220,19 +225,24 @@ export default {
 }
 #search-button {
   margin: 25px 15px;
-  padding: 10px 75px;
-  background-color: rgb(252, 180, 92);
+  padding: 10px 70px;
+  background-color: rgb(228, 164, 91);
   border-color: rgb(255, 152, 16);
   font-weight: 900;
-  color: rgb(137, 83, 54);
+  color: rgb(64, 32, 15);
 }
 #search-button:hover {
   background-color: rgb(244, 194, 124);
 }
 #reset-button {
   margin: 25px 45px;
-  padding: 10px 40px;
+  padding: 10px 30px;
   font-weight: 900;
-  color: rgb(101, 10, 7);
+  background-color:  rgb(171, 58, 32);
+  border-color: rgb(169, 22, 12);
+  color: rgb(55, 8, 6);
+}
+#reset-button:hover {
+  background-color: rgb(188, 74, 64);
 }
 </style>

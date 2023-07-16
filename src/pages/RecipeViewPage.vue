@@ -24,7 +24,10 @@
             </div>
             Ingredients:
             <ul>
-              <li v-for="ing in recipe.ingredients" :key="ing.name">{{ing.amount }} {{ing.name }}</li>
+              <li
+              v-for="ing in recipe.ingredients" :key="ing.name">
+               {{ing.amount }} {{ing.name }}
+              </li>
             </ul>
           </div>
           <div class="wrapped">
@@ -47,6 +50,7 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
@@ -64,7 +68,6 @@ export default {
             recipeId: recipeId
           }
         );
-
         this.recipe.isFavorite = true;
       } catch (error) {
         console.log(error);

@@ -11,7 +11,7 @@
       <!-- Right side of the screen -->
       <b-col class="LastWatchedOrLoginCol">
         <!-- if user is logged in -->
-        <LoginPage v-if="!$root.store.username"></LoginPage>
+        <LoginPage v-if="!$root.store.username" style="position: fixed; top: 50px;"></LoginPage>
         <!-- if user is not logged in -->
         <RecipePreviewList v-if="$root.store.username" ref="watched" title="Last Watched Recipes" route_name="/users/lastWatchedRecipes" class="LastWatchedRecipes"/>
       </b-col> 
@@ -40,7 +40,7 @@ export default {
   align-items: center;
   margin-bottom: 20px;
 }
-.button {
+.button, .button:focus, .button:active  {
   margin-top: 15px;
   margin-bottom: 20px;
   padding: 10px 20px;
@@ -55,8 +55,7 @@ export default {
   transition: 0.5s ease;
   user-select: none;
 }
-
-.button:hover {
+.button:hover{
   color: #ffffff;
   background: #008cff;
   border: 1px solid #008cff;

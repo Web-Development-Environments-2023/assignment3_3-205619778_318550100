@@ -1,14 +1,23 @@
 <template>
-  <router-link :to="{name:'recipe', params:{recipeId: recipe.id}}" class="recipe-preview">
     <div>
       <b-card id="card" tag="article" class="mb-2">
-        <b-card-img id="img" :src="recipe.image" img-alt="Image"></b-card-img>
+        <router-link :to="{name:'recipe', params:{recipeId: recipe.id, route_name: this.route_name}}" class="recipe-preview">
+        <div class="img-wrapper">
+          <b-card-img id="img" :src="recipe.image" class="hover-effect" style="cursor: pointer;" :title="'Click to view this recipe'"></b-card-img>
+        </div>
+        </router-link>
         <b-card-title id="title" :title="recipe.title"></b-card-title>
         <b-card-text>
           <b-list-group >
             <div class="dt-main-container">
             <dt><img src="../assets/time.png" class="time-ico"> {{ recipe.readyInMinutes }} minutes</dt>
             <dt><img src="../assets/like.png" class="like-ico"> {{ recipe.popularity }} Likes</dt>
+            <dt v-if="recipe.isFavorite && $root.store.username && this.route_name!='/users/myRecipes' && this.route_name!='/users/familyRecipes'">
+              <img src="../assets/redheart.png" class="like-ico">
+            </dt>
+            <dt v-if="!recipe.isFavorite && $root.store.username && this.route_name!='/users/myRecipes' && this.route_name!='/users/familyRecipes'">
+              <b-button @click="addToFavorites(recipe.id)" class="heart-button"><img src="../assets/heart.png" class="personal-ico"></b-button>
+            </dt>
           </div>
             <div class="dt-info-container">
               <dt v-if="recipe.glutenFree"><img src="../assets/gluten-free.png" class="info-ico"> Gluten Free</dt>
@@ -17,13 +26,11 @@
             </div>
             <div class="dt-personal-container">  
               <dt v-if="recipe.isWatched"><img src="../assets/eye.png" class="personal-ico"> Viewed Recipe</dt>
-              <dt v-if="recipe.isFavorite"><img src="../assets/favorite.png" class="personal-ico"> Favorite Recipe</dt>
             </div>
           </b-list-group>
         </b-card-text>
-      </b-card>
+        </b-card>
     </div>
-  </router-link>
 </template>
 
 
@@ -36,7 +43,7 @@ export default {
   },
   data() {
     return {
-      image_load: false
+      image_load: false,
     };
   },
   props: {
@@ -44,30 +51,33 @@ export default {
       type: Object,
       required: true
     },
-    // id: {
-    //   type: Number,
-    //   required: true
-    // },
-    // title: {
-    //   type: String,
-    //   required: true
-    // },
-    // readyInMinutes: {
-    //   type: Number,
-    //   required: true
-    // },
-    // image: {
-    //   type: String,
-    //   required: true
-    // },
-    // aggregateLikes: {
-    //   type: Number,
-    //   required: false,
-    //   default() {
-    //     return undefined;
-    //   }
-    // }
-  }
+    route_name:{
+      type: String,
+      required: false
+    },
+  },
+  watch: {
+    // This function will be executed when recipe.isFavorite changes
+    // Update the value of recipe.isFavorite to the new value
+    'recipe.isFavorite'(newValue) {
+      this.recipe.isFavorite = newValue;
+    }
+  },
+  methods:{
+    async addToFavorites(recipeId){
+      try {
+        const response = await this.axios.post(
+          this.$root.store.server_domain + "/users/favorites/",
+          {
+            recipeId: recipeId
+          }
+        );
+        this.recipe.isFavorite = true;
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    }
 };
 </script>
 
@@ -87,7 +97,6 @@ export default {
   max-width: 470px;
   min-height: 530px;
 }
-
 #title {
   font-weight: 700;
   font-family: cursive;  
@@ -136,5 +145,24 @@ export default {
 .dt-personal-container dt {
   display: inline-block;
   margin-right: 10px;
+}
+.recipe-preview .hover-effect:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  opacity: 0.8; 
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+.img-wrapper {
+    display: inline-block;
+    overflow: hidden;
+}
+.heart-button {
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.heart-button:hover {
+  background-color: transparent;
 }
 </style>

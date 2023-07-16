@@ -87,6 +87,8 @@ export default {
 
 <style>
 .nav-bar{
+  top: 0;
+  z-index: 10;
   font-family: cursive;
   background-color: rgba(0, 0, 1, 0.658)!important;
   height:50px ;

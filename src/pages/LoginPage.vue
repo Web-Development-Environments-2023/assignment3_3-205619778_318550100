@@ -91,11 +91,15 @@ export default {
 <style lang="scss" scoped>
 .container {
   display: block;
-  width: 90%;
+  width: 100%;
   max-width: 500px;
   border-radius: 25px;
-  padding-top: 150px;
   color:white;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  margin-top: 24vh;
+  top: 0;
 }
 .title {
   text-align: center;
