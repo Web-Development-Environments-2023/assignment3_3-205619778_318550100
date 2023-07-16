@@ -4,96 +4,55 @@
       <b-form @submit.prevent="onCreate" @reset.prevent="onResetCreate" >
         <!--Recipe Title-->
           <b-form-group>
-          <b-form-input
-              id="input-1"
-              v-model="form.title"
-              type="text"
-              placeholder="Enter recipe title"
-              required
-          ></b-form-input>
+            <b-form-input id="input-1" v-model="form.title" type="text" placeholder="Enter recipe title" required></b-form-input>
           </b-form-group> 
-
          <!--Recipe Servings number-->
           <b-form-group>
-          <b-form-input
-              id="input-2"
-              v-model="form.servings"
-              type="number"
-              placeholder="Enter servings number"
-              required
-          ></b-form-input>
+            <b-form-input id="input-2" v-model="form.servings" type="number" placeholder="Enter servings number" required></b-form-input>
           </b-form-group> 
-  
         <!--Recipe preparation Time-->
           <b-form-group>
-          <b-form-input
-              id="input-3"
-              v-model="form.readyInMinutes"
-              type="number"
-              placeholder="Enter preparation time in minutes "
-              required
-          ></b-form-input>
+            <b-form-input id="input-3" v-model="form.readyInMinutes" type="number" placeholder="Enter preparation time in minutes " required></b-form-input>
           </b-form-group> 
-        
         <!--Recipe Image-->
           <b-form-group>
-          <b-form-input
-              id="input-4"
-              v-model="form.image"
-              type="url"
-              placeholder="Enter the URL image of the recipe "
-              required
-          ></b-form-input>
+            <b-form-input id="input-4" v-model="form.image" type="url" placeholder="Enter the URL image of the recipe " required></b-form-input>
           </b-form-group>
-
           <!--Recipe Add Ingredient-->  
           <b-form @submit.prevent="add_ingredient">
             <b-row>
               <b-col>
-            <b-form-group>
-            <b-form-input v-model="form.ingredient" style="width:220px;" type="text"  placeholder="Enter ingredient" required></b-form-input>
-            </b-form-group>
-  
-            <b-form-group>
-            <b-form-input v-model="form.amount" style="width:220px;" type="number"  placeholder="Enter amount" required ></b-form-input>
-            </b-form-group>
-  
-            <b-form-group>
-              <b-button @click="add_ingredient">Add Ingredient</b-button>
-  
-            </b-form-group>
-            </b-col>
-            <b-col>
-            <p><b>ingredients that you already added:</b>
-            <br/>
-            {{this.display_ingredients}}
-            </p>
-            </b-col>
+                <b-form-group>
+                  <b-form-input v-model="form.ingredient" style="width:220px;" type="text"  placeholder="Enter ingredient" required></b-form-input>
+                </b-form-group>
+                <b-form-group>
+                  <b-form-input v-model="form.amount" style="width:220px;" type="number"  placeholder="Enter amount" required ></b-form-input>
+                </b-form-group>
+                <b-form-group>
+                  <b-button @click="add_ingredient">Add Ingredient</b-button>
+                </b-form-group>
+              </b-col>
+              <b-col>
+                <p><b>ingredients that you already added:</b><br/>{{this.display_ingredients}}</p>
+              </b-col>
             </b-row>
           </b-form>
-
           <!--Recipe Add Instractions-->
           <b-form @submit.prevent="add_step">
             <b-row>
               <b-col>
-            <b-form-group>
-            <b-form-input v-model="form.insrtaction" style="width:220px;" type="text"  placeholder="Enter Instraction Step" required></b-form-input>
-            </b-form-group>
-  
-            <b-form-group>
-              <b-button @click="add_step">Add Step</b-button>
-  
-            </b-form-group>
-            </b-col>
-            <b-col>
-            <p><b>Your instructions:</b>
-            <br/>
-            {{this.display_steps}}
-            </p>
-            </b-col>
+                <b-form-group>
+                <b-form-input v-model="form.insrtaction" style="width:220px;" type="text"  placeholder="Enter Instraction Step" required></b-form-input>
+                </b-form-group>
+                <b-form-group>
+                  <b-button @click="add_step">Add Step</b-button>
+                </b-form-group>
+              </b-col>
+              <b-col>
+                <p><b>Your instructions:</b><br/>{{this.display_steps}}</p>
+              </b-col>
             </b-row>
           </b-form>
-
           <!-- <b-form-group>
             <b-form-textarea
             id="textarea"
@@ -106,31 +65,23 @@
 
           <!--Choose if Vegan,Vegetrian,Gluten Free-->
           <b-row>
-        <b-col md="4">
-            <b-form-checkbox v-model="form.checked_gluten" name="check-button1" switch>
-            gluten free 
-            </b-form-checkbox> 
-        </b-col>
-
-        <b-col md="4">
-            <b-form-checkbox v-model="form.checked_vegan" name="check-button2" switch>
-            vegan 
-            </b-form-checkbox>
-        </b-col>
-
-        <b-col md="4">
-            <b-form-checkbox v-model="form.checked_vegetarian" name="check-button3" switch>
-            vegetarian 
-            </b-form-checkbox> 
-        </b-col>
-        </b-row>
-        <!--Reset and Create Buttons-->
-      <br/>                 
-      <b-row>
-        <b-col><b-button type="reset">Reset</b-button></b-col>
-        <b-col><b-button type="submit">Create</b-button></b-col>               
-      </b-row>
-      </b-form>            
+            <b-col md="4">
+                <b-form-checkbox v-model="form.checked_gluten" name="check-button1" switch>gluten free</b-form-checkbox> 
+            </b-col>
+            <b-col md="4">
+                <b-form-checkbox v-model="form.checked_vegan" name="check-button2" switch>vegan </b-form-checkbox>
+            </b-col>
+            <b-col md="4">
+                <b-form-checkbox v-model="form.checked_vegetarian" name="check-button3" switch>vegetarian </b-form-checkbox> 
+            </b-col>
+          </b-row>
+          <!--Reset and Create Buttons-->
+          <br/>                 
+          <b-row>
+            <b-col><b-button type="reset">Reset</b-button></b-col>
+            <b-col><b-button type="submit">Create</b-button></b-col>               
+          </b-row>
+        </b-form>            
       </b-modal>    
     </div>
   </template>
@@ -285,7 +236,6 @@
             this.step++
             }
         }
-  
   }
   </script>
   

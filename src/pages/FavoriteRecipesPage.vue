@@ -17,5 +17,13 @@ export default {
 </script>
 
 <style>
+.container {
+  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
 
+}
+.FavortiesRecipes {
+  margin-top: 20px;
+}
 </style>

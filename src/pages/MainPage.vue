@@ -1,9 +1,12 @@
 <template>
-  <div class="container">    <b-row>
+  <div class="container">    
+    <b-row>
       <!-- Left side of the screen -->
       <b-col class="RandomRecipesCol">
-        <RecipePreviewList ref="random" title="Explore This Recipes" route_name="/recipes/random" class="RandomRecipes" />
-        <b-button tag="random-button" @click="$refs.random.updateRecipes()">New Random Recipes</b-button>
+        <div class="content-container">
+          <RecipePreviewList ref="random" title="Explore This Recipes" route_name="/recipes/random" class="RandomRecipes" />
+          <b-button  class="button" tag="random-button" @click="$refs.random.updateRecipes()">New Random Recipes</b-button>
+        </div>
       </b-col>
       <!-- Right side of the screen -->
       <b-col class="LastWatchedOrLoginCol">
@@ -31,6 +34,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.button {
+  margin-top: 15px;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 500;
+  color: #ffffff80;
+  text-shadow: none;
+  background: transparent;
+  box-shadow: transparent;
+  border: 1px solid #ffffff80;
+  transition: 0.5s ease;
+  user-select: none;
+}
 
-
+.button:hover {
+  color: #ffffff;
+  background: #008cff;
+  border: 1px solid #008cff;
+  text-shadow: 0 0 5px #ffffff,
+              0 0 10px #ffffff,
+              0 0 20px #ffffff;
+  box-shadow: 0 0 5px #008cff,
+              0 0 20px #008cff,
+              0 0 50px #008cff,
+              0 0 100px #008cff;
+}
 </style>

@@ -100,7 +100,7 @@ export default {
 .title {
   text-align: center;
   padding: 15px;
-  font-family:'Century Gothic';
+  font-family: 'KG First Time In Forever', sans-serif;  
   font-size: 48px;
   color:#a2c7ee;
   font-weight: bolder;

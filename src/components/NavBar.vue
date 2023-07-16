@@ -2,7 +2,7 @@
   <!-- <b-navbar type="dark" variant="info" class="nav-bar"> -->
   <VueScrollFixedNavbar>
     <b-navbar toggleable="lg"  class="nav-bar">    
-      <router-link tag="b-navbar-brand" :to="{name:'main'}" style="font-weight: 1000; color: rgb(214, 209, 191)">Recipe Site</router-link>
+      <router-link tag="b-navbar-brand" :to="{name:'main'}" style="font-weight: 1000; color: rgb(255, 200, 128)">Recipe Site</router-link>
       <!-- Home -->
       <b-navbar-nav>
         <router-link tag="b-nav-item" :to="{name:'main'}"><b style="color: white">Home</b></router-link>
@@ -24,7 +24,7 @@
           <CreateRecipePage v-if="createRecipeClicked"></CreateRecipePage>
       </b-navbar-nav>
         <!-- Personal dropdown: Favorites, My Recipes, My Family Recipes -->
-        <b-nav-item-dropdown toggle-class="text-dark" text="Personal" class="bold-option">
+        <b-nav-item-dropdown text="Personal" class="bold-option">
           <router-link tag="b-dropdown-item" :to="{name:'favorites'}"><b style="color: white" >Favorites</b></router-link>     
           <router-link tag="b-dropdown-item" :to="{name:'myrecipes'}"><b style="color: white">My Recipes</b></router-link>
           <router-link tag="b-dropdown-item" :to="{name:'familyrecipes'}"><b style="color: white">My Family Recipes</b></router-link>

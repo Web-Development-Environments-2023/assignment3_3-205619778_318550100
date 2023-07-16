@@ -26,7 +26,7 @@ export default {
 
 <style lang="scss">
 @import "@/scss/form-style.scss";
-
+@import url('https://fonts.cdnfonts.com/css/kg-first-time-in-forever');
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
