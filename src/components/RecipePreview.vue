@@ -11,7 +11,7 @@
           <b-list-group >
             <div class="dt-main-container">
             <dt><img src="../assets/time.png" class="time-ico"> {{ recipe.readyInMinutes }} minutes</dt>
-            <dt><img src="../assets/like.png" class="like-ico"> {{ recipe.popularity }} Likes</dt>
+            <dt><img src="../assets/like.png" class="like-ico"> {{ recipe.popularity }} Likes </dt>
             <dt v-if="recipe.isFavorite && $root.store.username && this.route_name!='/users/myRecipes' && this.route_name!='/users/familyRecipes'">
               <img src="../assets/redheart.png" class="like-ico">
             </dt>

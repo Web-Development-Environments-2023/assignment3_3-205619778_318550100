@@ -2,14 +2,14 @@
   <div class="container">    
     <b-row>
       <!-- Left side of the screen -->
-      <b-col class="RandomRecipesCol">
+      <b-col class="RandomRecipesCol" sm="6">
         <div class="content-container">
           <RecipePreviewList ref="random" title="Explore This Recipes" route_name="/recipes/random" class="RandomRecipes" />
           <b-button  class="button" tag="random-button" @click="$refs.random.updateRecipes()">New Random Recipes</b-button>
         </div>
       </b-col>
       <!-- Right side of the screen -->
-      <b-col class="LastWatchedOrLoginCol">
+      <b-col class="LastWatchedOrLoginCol" sm="6">
         <!-- if user is logged in -->
         <LoginPage v-if="!$root.store.username" style="position: fixed; top: 50px;"></LoginPage>
         <!-- if user is not logged in -->
