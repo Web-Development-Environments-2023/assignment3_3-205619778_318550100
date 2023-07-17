@@ -54,7 +54,7 @@
         <router-link to="login"> Log in here</router-link>
       </div>
     </b-form>
-    <b-alert class="mt-2" v-if="form.submitError" variant="warning" dismissible show>Register failed: {{ form.submitError }}</b-alert>
+    <b-alert class="mt-2" v-if="form.submitError" variant="warning" dismissible show @dismissed="form.submitError = undefined">Register failed: {{ form.submitError }}</b-alert>
   </div>
 </template>
 
@@ -148,6 +148,7 @@ export default {
         );
         this.$router.push("/login");
         console.log(response);
+        this.form.submitError = undefined; // Reset submitError after successful registration
       } catch (err) {
         console.log(err.response);
         this.form.submitError = err.response.data.message;
@@ -166,12 +167,13 @@ export default {
       console.log("On reset method called");
       this.form = {
         username: "",
-        firstName: "",
-        lastName: "",
+        firstname: "",
+        lastname: "",
         country: null,
         password: "",
         confirmedPassword: "",
-        email: ""
+        email: "",
+        submitError: undefined
       };
       this.$nextTick(() => {
         this.$v.$reset();
@@ -180,6 +182,7 @@ export default {
   }
 };
 </script>
+
 <style lang="scss" scoped>
 .container {
   margin: auto;
