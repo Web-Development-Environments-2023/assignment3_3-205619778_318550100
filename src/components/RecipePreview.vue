@@ -40,10 +40,16 @@ export default {
     this.axios.get(this.recipe.image).then((i) => {
       this.image_load = true;
     });
+    if (this.$root.store.username) {
+      this.checkWatched();
+      this.checkfavorite();
+    }
   },
   data() {
     return {
       image_load: false,
+      isWatched: false,
+      isFavorite: false,
     };
   },
   props: {
@@ -72,11 +78,58 @@ export default {
             recipeId: recipeId
           }
         );
+        this.updateFavorites();
         this.recipe.isFavorite = true;
       } catch (error) {
         console.log(error);
       }
-    }
+    },
+    async updateFavorites() {
+      try {
+        const response = await this.axios.get(
+          this.$root.store.server_domain + "/users/favorites"
+        );
+        const recipes = response.data;
+        let recipes_list = [];
+        recipes_list.push(...recipes);
+        this.$root.store.updateFavoriteList(recipes_list);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    checkfavorite() {
+      let recipeId = this.recipe.id;
+      let favorite_list = this.$root.store.favorite_list;
+      for (let i = 0; i < favorite_list.length; i++) {
+        if (recipeId == favorite_list[i].id) {
+          this.isFavorite = true;
+          break;
+        }
+      }
+    },
+    async updateWatchedList() {
+      try {
+        const response = await this.axios.get(
+          this.$root.store.server_domain + "/users/allLastWatchedRecipes"
+        );
+        const recipes = response.data;
+        let recipes_list = [];
+        recipes_list.push(...recipes);
+        this.$root.store.updateWatchedList(recipes_list);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    checkWatched() {
+      let recipeId = this.recipe.id;
+      let watched_list = this.$root.store.watched_list;
+      for (let i = 0; i < watched_list.length; i++) {
+        if (recipeId == watched_list[i].id) {
+          this.isWatched = true;
+          break;
+        }
+      }
+    },
     }
 };
 </script>

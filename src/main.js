@@ -82,6 +82,7 @@ const shared_data = {
   server_domain: "http://localhost:3000",
   username: localStorage.username,
   watched_list: localStorage.watched_list,
+  favorite_list: localStorage.favorite_list,
   lastSearch: sessionStorage.lastSearch,
   login(username) {
     localStorage.setItem("username", username);
@@ -92,6 +93,14 @@ const shared_data = {
     console.log("logout");
     localStorage.removeItem("username");
     this.username = undefined;
+  },
+  updateWatchedList(watched_list) {
+    localStorage.setItem("watched_list", watched_list);
+    this.watched_list = watched_list;
+  },
+  updateFavoriteList(favorite_list) {
+    localStorage.setItem("favorite_list", favorite_list);
+    this.favorite_list = favorite_list;
   },
   setLastSearch(searchDetails){
     this.lastSearch = searchDetails;

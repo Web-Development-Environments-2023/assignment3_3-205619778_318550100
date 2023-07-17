@@ -90,7 +90,6 @@ export default {
   name: "Search",
   components: {
     RecipePreview,
-    
   },
   data() {
     return {
@@ -140,7 +139,6 @@ export default {
         console.log(error);
       }
       this.LastSearchcalled=true;
-
     },
     async Search() {
       try {
@@ -155,7 +153,6 @@ export default {
             intolerance: this.form.intolerance,
           }
           },
-        
         );
         this.search_results = response.data;
         if (this.isEmpty) {
@@ -209,7 +206,6 @@ export default {
 .container {
   margin: auto;
   margin-top: 5%;
-  margin-bottom: 5%;
   max-width: 750px;
   padding: 30px;
   color: rgb(255, 255, 255);
