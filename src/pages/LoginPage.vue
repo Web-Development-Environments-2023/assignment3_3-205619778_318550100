@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="login-container">
     <h1 class="title">Login</h1>
     <b-form @submit.prevent="onLogin">
       <b-form-group id="input-group-Username" label-cols-sm="3" label="Username:" label-for="Username">
@@ -89,7 +89,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.container {
+.login-container {
   display: block;
   width: 100%;
   max-width: 500px;

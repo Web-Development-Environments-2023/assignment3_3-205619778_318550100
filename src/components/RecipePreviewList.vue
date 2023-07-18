@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="list-container">
       <h3 class="title">
         {{ title }}
         <slot></slot>
@@ -60,7 +60,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.list-container {
   padding-top: 30px;
   min-height: 400px;
   display: block;  

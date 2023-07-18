@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="myrecipes-container">
     <RecipePreviewList ref="myrecipes" title="My Recipes" route_name="/users/myRecipes" class="MyRecipes"/>
   </div>
 </template>
@@ -18,5 +18,10 @@ export default {
 </script>
   
 <style>
-  
+.myrecipes-container {
+  display: flex;  
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 30px;
+}
 </style>

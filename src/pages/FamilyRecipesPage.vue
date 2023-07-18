@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="family-container">
       <RecipePreviewList ref="familyrecipes" title="Family Recipes" route_name="/users/familyRecipes" class="FamilyRecipes"/>
     </div>
 </template>
@@ -17,5 +17,10 @@ export default {
 </script>
     
 <style>
-    
+.family-container {
+  display: flex;  
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 30px;
+}
 </style>

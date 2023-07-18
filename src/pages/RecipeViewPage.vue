@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="preview-container">
     <div v-if="recipe">
       <div class="recipe-header mt-3 mb-4">
         <h1 class="title">{{ recipe.title }}</h1>
@@ -176,17 +176,21 @@ export default {
 </script>
 
 <style scoped>
-.container {
+.preview-container {
   display: flex;
-  flex-direction: center;
+  justify-content: center; /* Horizontally center the content */
+  align-items: center; /* Vertically center the content */
   background-color: rgba(0, 0, 0, 0.634);
   padding: 10px 100px 100px 100px;
   color:rgb(255, 255, 255);
-  width: 90%;
+  width: 80%;
+  max-width: 1300px;
+  margin: 0 auto;
   font-family: 'KG First Time In Forever', sans-serif;
 }
 .wrapper {
   display: flex;
+  max-width: 1000px;
 }
 .wrapped1 {
   width: 35%;

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">    
+  <div class="main-container">    
     <b-row>
       <!-- Left side of the screen -->
       <b-col class="RandomRecipesCol" sm="6">
@@ -34,11 +34,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.main-container {
+  max-width: 100%;
+  display: block;
+  justify-content: center;
+  overflow: hidden;
+}
 .content-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; 
   margin-bottom: 20px;
+}
+.LastWatchedOrLoginCol {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  flex-wrap: wrap;
 }
 .button, .button:focus, .button:active  {
   margin-top: 15px;

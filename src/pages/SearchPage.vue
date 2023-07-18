@@ -1,5 +1,5 @@
 <template>
-  <div id="search_form" class="container">
+  <div id="search_form" class="search-container">
     <h1 class="title">Search Recipes</h1>
     <b-form @submit.prevent="onSearch" @reset.prevent="onReset">
       <b-row>
@@ -192,7 +192,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.search-container {
   margin: auto;
   margin-top: 5%;
   max-width: 750px;

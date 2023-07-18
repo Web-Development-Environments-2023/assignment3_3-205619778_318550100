@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="register-container">
     <h1 class="title">Register</h1>
     <b-form @submit.prevent="onRegister" @reset.prevent="onReset">
       <b-form-group id="input-group-username" label-cols-sm="4" label="Username:" label-for="username">
@@ -184,7 +184,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.register-container {
   margin: auto;
   max-width: 500px;
   padding: 30px;

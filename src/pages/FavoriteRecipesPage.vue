@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="favorites-container">
     <RecipePreviewList ref="favoriterecipes" title="Favorite Recipes" route_name="/users/favorites" class="FavortiesRecipes"/>
   </div>
 </template>
@@ -17,13 +17,10 @@ export default {
 </script>
 
 <style>
-.container {
-  text-align: center;
-  display: flex;
-  flex-wrap: wrap;
-
-}
-.FavortiesRecipes {
-  margin-top: 20px;
+.favorites-container {
+  display: flex;  
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 30px;
 }
 </style>
