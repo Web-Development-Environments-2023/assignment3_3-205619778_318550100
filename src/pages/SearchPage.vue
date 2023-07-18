@@ -56,7 +56,7 @@
       <h5 id="no-results" v-if="noResults">We couldn't find recipes that match your search</h5>
       <div v-else class="text-center"> 
 
-        <b-dropdown id="sort" v-if="!isEmpty" text="Sort By" variant="outline-dark" class="m-2">
+        <b-dropdown id="sort" v-if="!isEmpty" text="Sort By" class="m-2">
           <b-dropdown-item v-on:click="this.sortByPrepTime">Preperation Time</b-dropdown-item>
           <b-dropdown-item v-on:click="this.sortByPopularity">Popularity</b-dropdown-item>
         </b-dropdown>
@@ -166,17 +166,13 @@ export default {
     },
     onReset() {
       console.log("On reset method called");
-      this.form = {
-        query: "",
-        number: "5",
-        cuisine: null,
-        diet: null,
-        intolerance: null,
-        noResults: false,
-      };
-      this.$nextTick(() => {
-        this.$v.$reset();
-      });
+      this.form.search = ""; // Reset the search field to an empty string
+      this.form.number = "5"; // Reset the number field to its default value
+      this.form.cuisine = null; // Reset the cuisine field to null
+      this.form.diet = null; // Reset the diet field to null
+      this.form.intolerance = null; // Reset the intolerance field to null
+      this.noResults = false; // Reset the noResults flag to false
+      this.$v.$reset(); // Reset the vuelidate form validation
     },
     sortByPrepTime() {
         this.search_results.sort(function(a, b) {
@@ -210,6 +206,9 @@ export default {
   padding: 10px 10px;
   color: rgb(189, 161, 111);
   font-weight: 700;
+}
+#no-results {
+  text-align: center;
 }
 #search-button {
   margin: 35px 0px 0px 40px;
