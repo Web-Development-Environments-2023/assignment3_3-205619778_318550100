@@ -132,7 +132,7 @@ export default {
       const jsonInstraction = JSON.parse(instructions);
       ingredients = jsonIngredients.map((item) => ({
       name: item.name,
-      amount: parseInt(item.amount) // Convert amount to a number if needed
+      amount: parseFloat(item.amount) 
         }));
         instructions = jsonInstraction.map((item) => ({
         name: item.name,

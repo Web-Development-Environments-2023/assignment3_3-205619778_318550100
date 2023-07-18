@@ -26,7 +26,7 @@
                   <b-form-input v-model="form.ingredient" style="width:220px;" type="text"  placeholder="Enter ingredient" required></b-form-input>
                 </b-form-group>
                 <b-form-group>
-                  <b-form-input v-model="form.amount" style="width:220px;" type="number"  placeholder="Enter amount" required ></b-form-input>
+                  <b-form-input v-model="form.amount" style="width:220px;" type="text"  placeholder="Enter amount" required ></b-form-input>
                 </b-form-group>
                 <b-form-group>
                   <b-button @click="add_ingredient">Add Ingredient</b-button>
@@ -42,7 +42,7 @@
             <b-row>
               <b-col>
                 <b-form-group>
-                <b-form-input v-model="form.insrtaction" style="width:220px;" type="text"  placeholder="Enter Instraction Step" required></b-form-input>
+                <b-form-input v-model="form.insrtaction" style="width:220px;" type="text"  placeholder="Enter instruction step" required></b-form-input>
                 </b-form-group>
                 <b-form-group>
                   <b-button @click="add_step">Add Step</b-button>
@@ -82,59 +82,57 @@
             <b-col><b-button type="submit">Create</b-button></b-col>               
           </b-row>
         </b-form>            
-      </b-modal>    
-    </div>
-  </template>
+    </b-modal>    
+  </div>
+</template>
   
-  <script>
-  export default {
-    data() {
-      return {
-        form: {
-          title: '',
-          servings: '',
-          readyInMinutes:'',
-          image:'',
-          checked_gluten: false,
-          checked_vegetarian: false,
-          checked_vegan: false,
-          insrtaction:'',
-          ingredient:'',
-          amount:'',   
-          },
-          ingredients:[],
-          display_ingredients:"",
-          display_steps:"",
-          insrtactions:[],
-          step:1,
-          steps:[],
-
+<script>
+export default {
+  data() {
+    return {
+      form: {
+        title: '',
+        servings: '',
+        readyInMinutes:'',
+        image:'',
+        checked_gluten: false,
+        checked_vegetarian: false,
+        checked_vegan: false,
+        insrtaction:'',
+        ingredient:'',
+        amount:'',   
+      },
+        ingredients:[],
+        display_ingredients:"",
+        display_steps:"",
+        insrtactions:[],
+        step:1,
+        steps:[],
         }
       },
-    mounted() {
-        this.onResetCreate();
+  mounted() {
+      this.onResetCreate();
     },
-    methods: {
-      async Create() {
-        try {
-          const response = await this.axios.post(
-            this.$root.store.server_domain + "/users/myRecipes",
-          {
-            title: this.form.title,
-            readyInMinutes: this.form.readyInMinutes ,
-            image: this.form.image,
-            vegan: this.form.checked_vegan,
-            vegetarian: this.form.checked_vegetarian,
-            glutenFree:  this.form.checked_gluten,
-            ingredients: this.ingredients,
-            instructions: this.insrtactions,
-            servings: this.form.servings                         
-          }
-          );
-  
-          await this.onResetCreate();
-          this.$refs['my-modal'].hide()
-          console.log(response)
+  methods: {
+    async Create() {
+      try {
+        const response = await this.axios.post(
+        this.$root.store.server_domain + "/users/myRecipes",
+        {
+          title: this.form.title,
+          readyInMinutes: this.form.readyInMinutes ,
+          image: this.form.image,
+          vegan: this.form.checked_vegan,
+          vegetarian: this.form.checked_vegetarian,
+          glutenFree:  this.form.checked_gluten,
+          ingredients: this.ingredients,
+          instructions: this.insrtactions,
+          servings: this.form.servings                         
+        }
+        );
+        await this.onResetCreate();
+        this.$refs['my-modal'].hide()
+        console.log(response)
         } catch (err) {
           console.log(err);
           this.form.submitError = err.response.data.message;
@@ -142,28 +140,27 @@
       },
       onCreate(){
         if(this.form.checked_gluten){
-            this.form.checked_gluten=1;
+          this.form.checked_gluten=1;
         }
         else{
-            this.form.checked_gluten=0;
+          this.form.checked_gluten=0;
         }
         if(this.form.checked_vegan){
-            this.form.checked_vegan=1;
+          this.form.checked_vegan=1;
         }
         else{
-            this.form.checked_vegan=0;
+          this.form.checked_vegan=0;
         }
         if(this.form.checked_vegetarian){
-            this.form.checked_vegetarian=1;
+          this.form.checked_vegetarian=1;
         }
         else{
-            this.form.checked_vegetarian=0;
+          this.form.checked_vegetarian=0;
         }
         let obj = {
           "name": "",
           "steps": this.steps
-          }   
-         
+        }    
         this.insrtactions.push(obj);
         if(this.ingredients.length > 0){
           this.Create()
@@ -173,10 +170,8 @@
           this.$root.toast("error", "there is no ingredients", "error");
         }
         onResetCreate()
-  
       },
       onResetCreate(){
-       
         this.form={
           title: '',
           servings: '',
@@ -189,7 +184,6 @@
           ingredient:'',
           amount:'',
         },
-
         this.ingredients=[],
         this.display_ingredients=""
         this.display_steps=""
@@ -197,48 +191,50 @@
         this.step=1
         this.steps=[]        
       },
-
       add_ingredient(){
         if(this.form.ingredient !== "" && this.form.amount !=="")
         {      
-          let obj = {
-          "name": this.form.ingredient,
-          "amount": this.form.amount
-          }   
-         
-        this.ingredients.push(obj);
-        this.display_ingredients = this.display_ingredients + this.form.ingredient + ":" + this.form.amount + ", "
-        this.reset_ingredient();
-        }
-      },
+          // Convert the amount to a floating-point number
+          let amount = parseFloat(this.form.amount);
+
+          // Check if the conversion was successful and the amount is greater than zero
+          if (!isNaN(amount) && amount > 0) {
+            let obj = {
+            "name": this.form.ingredient,
+            "amount": this.form.amount
+            }   
+            this.ingredients.push(obj);
+            this.display_ingredients = this.display_ingredients + this.form.ingredient + ": " + amount + ", ";
+            this.reset_ingredient();
+            } else {
+              this.$root.toast("error", "Please enter a valid amount.", "error");
+            }
+          }
+        },
 
       reset_ingredient(){
         this.form.ingredient='',
         this.form.amount=''
         },
-
-        add_step(){
-            if(this.form.insrtaction !== "")
-            {      
+      add_step(){
+          if(this.form.insrtaction !== "") {      
             let obj = {
             "number": this.step,
             "step": this.form.insrtaction
             }   
-            
             this.steps.push(obj);
             this.display_steps += this.step +". " + this.form.insrtaction + ", " 
             this.reset_steps();
-
         }
         },
         reset_steps(){
-            this.form.insrtaction='',
-            this.step++
-            }
+          this.form.insrtaction='',
+          this.step++
         }
-  }
-  </script>
+      }
+    }
+</script>
   
-  <style>
+<style>
 
-  </style>
+</style>
