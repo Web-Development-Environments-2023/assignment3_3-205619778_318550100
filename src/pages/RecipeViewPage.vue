@@ -17,10 +17,10 @@
               <div v-if="recipe.glutenFree"><img src="../assets/gluten-free.png" class="icons"> Gluten Free</div>
               <div v-if="recipe.creator">Made by: {{ recipe.creator }}</div>
               <div v-if="recipe.customary">Usally Make in: {{ recipe.customary }}</div>
-              <div v-if="recipe.isFavorite && $root.store.username && this.$route.params.route_name!='/users/familyRecipes' && this.$route.params.route_name!='/users/myRecipes'">
+              <div v-if="recipe.isFavorite && $root.store.username && this.$route.params.route_name!='/users/familyRecipes' && this.$route.params.route_name!='/users/myRecipes' && this.$route.params.route_name!='/users/lastSearch' && this.$route.params.route_name!='/recipes/search'">
                 <img src="../assets/redheart1.png" class="icons"> Favorite Recipe
               </div>
-              <div v-if="!recipe.isFavorite && $root.store.username && this.$route.params.route_name!='/users/familyRecipes' && this.$route.params.route_name!='/users/myRecipes'">
+              <div v-if="!recipe.isFavorite && $root.store.username && this.$route.params.route_name!='/users/familyRecipes' && this.$route.params.route_name!='/users/myRecipes' && this.$route.params.route_name!='/users/lastSearch' && this.$route.params.route_name!='/recipes/search'">
                 <b-button @click="addToFavorites($route.params.recipeId)" class="heart-button"><img src="../assets/redheart.png" class="icons"> Add to Favorites</b-button>
               </div>
               </div>

@@ -40,18 +40,11 @@
             <b-form-radio v-model="$v.form.number.$model" :aria-describedby="ariaDescribedby" name="some-radios" value="15">15</b-form-radio>
           </b-form-group>
         </b-col>
-        <b-col sm="3">
-          <!-- Sort results by -->
-          <b-form-group label="sort results by:" class="search-field" v-slot="{ ariaDescribedby }">
-            <b-form-radio v-model="form.selected_sort" :aria-describedby="ariaDescribedby" name="some-radios2" value="popularity">popularity</b-form-radio>
-            <b-form-radio v-model="form.selected_sort" :aria-describedby="ariaDescribedby" name="some-radios2" value="time">time</b-form-radio>
-          </b-form-group>
-        </b-col>  
         <!-- Buttons -->
-        <b-col sm="3">
+        <b-col sm="4.5">
           <b-button id="search-button" type="submit" variant="primary">Search</b-button>
         </b-col>
-        <b-col sm="3">
+        <b-col sm="4.5">
           <b-button id="reset-button" type="reset" variant="danger">Reset</b-button>
         </b-col>
       </b-row>
@@ -211,7 +204,6 @@ export default {
   color: rgb(255, 255, 255);
   font-family: 'KG First Time In Forever', sans-serif;
   font-weight: 900;
-
 }
 .title{
   text-align: center;
@@ -220,8 +212,8 @@ export default {
   font-weight: 700;
 }
 #search-button {
-  margin: 25px 15px;
-  padding: 10px 70px;
+  margin: 35px 0px 0px 40px;
+  padding: 10px 110px;
   background-color: rgb(228, 164, 91);
   border-color: rgb(255, 152, 16);
   font-weight: 900;
@@ -231,8 +223,8 @@ export default {
   background-color: rgb(244, 194, 124);
 }
 #reset-button {
-  margin: 25px 45px;
-  padding: 10px 30px;
+  margin: 35px;
+  padding: 10px 60px;
   font-weight: 900;
   background-color:  rgb(171, 58, 32);
   border-color: rgb(169, 22, 12);

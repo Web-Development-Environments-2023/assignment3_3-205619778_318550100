@@ -1,6 +1,6 @@
 <template>
-    <div>  
-      <b-modal id="modal-1"  ref="my-modal" title="Create New Recipe" hide-footer>
+    <div class="modalcontainer">  
+      <b-modal id="modal-1" class="createtitle" ref="my-modal" title="Create New Recipe" hide-footer>
       <b-form @submit.prevent="onCreate" @reset.prevent="onResetCreate" >
         <!--Recipe Title-->
           <b-form-group>
@@ -240,5 +240,5 @@
   </script>
   
   <style>
-  
+
   </style>
