@@ -2,9 +2,11 @@ import Vue from "vue";
 import App from "./App.vue";
 import VueAxios from "vue-axios";
 import axios from "axios";
-
+import VueScrollFixedNavbar from "vue-scroll-fixed-navbar";
 import routes from "./routes";
 import VueRouter from "vue-router";
+
+Vue.use(VueScrollFixedNavbar);
 Vue.use(VueRouter);
 const router = new VueRouter({
   routes,
@@ -24,6 +26,11 @@ import {
   AlertPlugin,
   ToastPlugin,
   LayoutPlugin,
+  FormRadioPlugin,
+  ModalPlugin,
+  FormCheckboxPlugin,
+  FormTextareaPlugin,
+  ListGroupPlugin,
 } from "bootstrap-vue";
 [
   FormGroupPlugin,
@@ -36,6 +43,11 @@ import {
   AlertPlugin,
   ToastPlugin,
   LayoutPlugin,
+  FormRadioPlugin,
+  ModalPlugin,
+  FormCheckboxPlugin,
+  FormTextareaPlugin,
+  ListGroupPlugin,
 ].forEach((x) => Vue.use(x));
 Vue.use(Vuelidate);
 
@@ -67,7 +79,11 @@ Vue.use(VueAxios, axios);
 Vue.config.productionTip = false;
 
 const shared_data = {
+  server_domain: "http://localhost:3000",
   username: localStorage.username,
+  watched_list: localStorage.watched_list,
+  favorite_list: localStorage.favorite_list,
+  lastSearch: sessionStorage.lastSearch,
   login(username) {
     localStorage.setItem("username", username);
     this.username = username;
@@ -78,6 +94,18 @@ const shared_data = {
     localStorage.removeItem("username");
     this.username = undefined;
   },
+  updateWatchedList(watched_list) {
+    localStorage.setItem("watched_list", watched_list);
+    this.watched_list = watched_list;
+  },
+  updateFavoriteList(favorite_list) {
+    localStorage.setItem("favorite_list", favorite_list);
+    this.favorite_list = favorite_list;
+  },
+  setLastSearch(searchDetails){
+    this.lastSearch = searchDetails;
+    sessionStorage.setItem("lastSearch", this.lastSearch);
+  }
 };
 console.log(shared_data);
 // Vue.prototype.$root.store = shared_data;
@@ -103,3 +131,5 @@ new Vue({
   },
   render: (h) => h(App),
 }).$mount("#app");
+
+axios.defaults.withCredentials=true;

@@ -1,67 +1,100 @@
 <template>
-  <div class="container">
+  <div class="preview-container">
     <div v-if="recipe">
       <div class="recipe-header mt-3 mb-4">
-        <h1>{{ recipe.title }}</h1>
-        <img :src="recipe.image" class="center" />
+        <h1 class="title">{{ recipe.title }}</h1>
+        <img :src="recipe.image" class="image" />
       </div>
       <div class="recipe-body">
         <div class="wrapper">
-          <div class="wrapped">
+          <div class="wrapped1">
             <div class="mb-3">
-              <div>Ready in {{ recipe.readyInMinutes }} minutes</div>
-              <div>Likes: {{ recipe.aggregateLikes }} likes</div>
+              <div><img src="../assets/clock.png" class="icons"> {{ recipe.readyInMinutes }} minutes</div>
+              <div><img src="../assets/servings.png" class="icons"> {{ recipe.servings }} servings</div>
+              <div v-if="recipe.popularity"><img src="../assets/thumb-up.png" class="icons"> {{ recipe.popularity }} likes</div>
+              <div v-if="recipe.vegetarian"><img src="../assets/vegeterian.png" class="icons"> Vegeterian</div>
+              <div v-if="recipe.vegan"><img src="../assets/vegan.png" class="icons"> Vegan</div>
+              <div v-if="recipe.glutenFree"><img src="../assets/gluten-free.png" class="icons"> Gluten Free</div>
+              <div v-if="recipe.creator">Made by: {{ recipe.creator }}</div>
+              <div v-if="recipe.customary">Usally Make in: {{ recipe.customary }}</div>
+              <div v-if="recipe.isFavorite && $root.store.username && this.$route.params.route_name!='/users/familyRecipes' && this.$route.params.route_name!='/users/myRecipes' && this.$route.params.route_name!='/users/lastSearch' && this.$route.params.route_name!='/recipes/search'">
+                <img src="../assets/redheart1.png" class="icons"> Favorite Recipe
+              </div>
+              <div v-if="!recipe.isFavorite && $root.store.username && this.$route.params.route_name!='/users/familyRecipes' && this.$route.params.route_name!='/users/myRecipes' && this.$route.params.route_name!='/users/lastSearch' && this.$route.params.route_name!='/recipes/search'">
+                <b-button @click="addToFavorites($route.params.recipeId)" class="heart-button"><img src="../assets/redheart.png" class="icons"> Add to Favorites</b-button>
+              </div>
+              </div>
+                <b><u>Ingredients:</u></b>
+                <ul>
+                  <li v-for="ing in recipe.ingredients" :key="ing.name"> {{ing.amount }} {{ing.name }}</li>
+                </ul>
             </div>
-            Ingredients:
-            <ul>
-              <li
-                v-for="(r, index) in recipe.extendedIngredients"
-                :key="index + '_' + r.id"
-              >
-                {{ r.original }}
-              </li>
-            </ul>
-          </div>
-          <div class="wrapped">
-            Instructions:
-            <ol>
-              <li v-for="s in recipe._instructions" :key="s.number">
-                {{ s.step }}
-              </li>
-            </ol>
+            <div class="wrapped2">
+            <b><u>Instructions:</u></b>
+              <ol>
+                <li v-for="s in recipe._instructions" :key="s.number">{{ s.step }}</li>
+              </ol>
+            </div>
           </div>
         </div>
       </div>
-      <!-- <pre>
-      {{ $route.params }}
-      {{ recipe }}
-    </pre
-      > -->
     </div>
-  </div>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      recipe: null
+      recipe: null,
+      myRecipe: false,
+      familyRecipes: false
     };
+  },
+  watch: {
+    // This function will be executed when recipe.isFavorite changes
+    // Update the value of recipe.isFavorite to the new value
+    'recipe.isFavorite'(newValue) {
+      this.recipe.isFavorite = newValue;
+    }
+  },
+  methods:{
+    async addToFavorites(recipeId){
+      try {
+        const response = await this.axios.post(
+          this.$root.store.server_domain + "/users/favorites/",
+          {
+            recipeId: recipeId
+          }
+        );
+        this.recipe.isFavorite = true;
+      } catch (error) {
+        console.log(error);
+      }
+    }
   },
   async created() {
     try {
       let response;
+      let _response;
+      let path = "/recipes/"
       // response = this.$route.params.response;
-
+      let id = this.$route.params.recipeId
+      if(this.$route.params.route_name === "/users/myRecipes"){
+        path = "/users/myRecipes/"
+        this.myRecipe = true;
+      }
+      if(this.$route.params.route_name === "/users/familyRecipes"){
+        path = "/users/familyRecipes/"
+        this.familyRecipes = true;
+      }
       try {
         response = await this.axios.get(
           // "https://test-for-3-2.herokuapp.com/recipes/info",
-          this.$root.store.server_domain + "/recipes/info",
+          this.$root.store.server_domain + path +id,
           {
             params: { id: this.$route.params.recipeId }
-          }
+          }   
         );
-
         // console.log("response.status", response.status);
         if (response.status !== 200) this.$router.replace("/NotFound");
       } catch (error) {
@@ -69,57 +102,143 @@ export default {
         this.$router.replace("/NotFound");
         return;
       }
+      // console.log(response.data[0])
+      if(this.myRecipe || this.familyRecipes){
+        _response = response.data[0]
 
+      }
+      else{
+        _response = response.data
+      }
       let {
-        analyzedInstructions,
         instructions,
-        extendedIngredients,
-        aggregateLikes,
+        ingredients,
+        popularity,
         readyInMinutes,
+        servings,
         image,
-        title
-      } = response.data.recipe;
+        title,
+        vegan,
+        vegetarian,
+        glutenFree,
+        isWatched,
+        isFavorite,
+        creator,
+        customary
+      } = _response;
+      //if is Private Recipe
+      if(this.myRecipe || this.familyRecipes){
+      const jsonIngredients = JSON.parse(ingredients)
+      const jsonInstraction = JSON.parse(instructions);
+      ingredients = jsonIngredients.map((item) => ({
+      name: item.name,
+      amount: parseFloat(item.amount) 
+        }));
+        instructions = jsonInstraction.map((item) => ({
+        name: item.name,
+        steps: item.steps.map((step) => ({
+          number: step.number,
+          step: step.step
+        }))
+     }));
+    }
+    console.log(this.$route.params.route_name)
 
-      let _instructions = analyzedInstructions
+    //rest of recipes
+     let _instructions = instructions
         .map((fstep) => {
           fstep.steps[0].step = fstep.name + fstep.steps[0].step;
           return fstep.steps;
         })
         .reduce((a, b) => [...a, ...b], []);
-
       let _recipe = {
-        instructions,
         _instructions,
-        analyzedInstructions,
-        extendedIngredients,
-        aggregateLikes,
+        ingredients,
+        popularity,
         readyInMinutes,
+        servings,
         image,
-        title
+        title,
+        vegan,
+        vegetarian,
+        glutenFree,
+        isWatched,
+        isFavorite,
+        creator,
+        customary    
       };
-
       this.recipe = _recipe;
     } catch (error) {
       console.log(error);
     }
-  }
+}
 };
 </script>
 
 <style scoped>
+.preview-container {
+  display: flex;
+  justify-content: center; /* Horizontally center the content */
+  align-items: center; /* Vertically center the content */
+  background-color: rgba(0, 0, 0, 0.634);
+  padding: 10px 100px 100px 100px;
+  color:rgb(255, 255, 255);
+  width: 80%;
+  max-width: 1300px;
+  margin: 0 auto;
+  font-family: 'KG First Time In Forever', sans-serif;
+}
 .wrapper {
   display: flex;
+  max-width: 1000px;
 }
-.wrapped {
-  width: 50%;
+.wrapped1 {
+  width: 35%;
+  color:white;
 }
-.center {
+.wrapped2 {
+  width: 65%;
+  color:white;
+}
+.mb-3 {
+  font-weight: 900;
+  color: rgb(174, 163, 163);
+}
+u {
+  color: rgb(226, 205, 168);
+}
+.image {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 100%;
 }
-/* .recipe-header{
-
-} */
+.title {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: rgb(189, 161, 111);
+  font-weight: 700;
+}
+ul, ol {
+  margin-top: 5px;
+  list-style-position: inside;
+  padding-left: 0;
+}
+ol li {
+  margin-bottom: 6px;
+}
+ol > li::marker {
+  font-weight: 900;
+  color: rgb(238, 220, 189);
+}
+.icons {
+  width: 22px;
+  height: 22px;
+}
+.heart-button {
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: bold;
+}
 </style>
